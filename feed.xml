@@ -1,35 +1,35 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
 <channel>
   <title><![CDATA[Yingbo Ma's homepage]]></title>
-  <description><![CDATA[Yingbo Ma&#39;s homepage
+  <description><![CDATA[I put my random thoughts here.
 ]]></description>
-  <link>https://yingboma.github.io/</link>
-  <atom:link href="https://yingboma.github.io/feed.xml" rel="self" type="application/rss+xml" />
+  <link>https://YingboMa.github.io/</link>
+  <atom:link href="https://YingboMa.github.io/feed.xml" rel="self" type="application/rss+xml" />
   <item>
     <title><![CDATA[Posts]]></title>
-    <link>https://yingboma.github.io/blog/</link>
+    <link>https://YingboMa.github.io/blog/</link>
     <description><![CDATA[A short description of the page which would serve as <strong>blurb</strong> in a <code>RSS</code> feed; you can use basic markdown here but the whole description string must be a single line &#40;not a multiline string&#41;. Like this one for instance. Keep in mind that styling is minimal in RSS so for instance don&#39;t expect maths or fancy styling to work; images should be ok though: <img src="https://upload.wikimedia.org/wikipedia/en/3/32/Rick_and_Morty_opening_credits.jpeg" alt="" />
-<br><a href="https://yingboma.github.io/blog/">Read more</a>]]></description>
+<br><a href="https://YingboMa.github.io/blog/">Read more</a>]]></description>
     
-    <guid>https://yingboma.github.io/blog/</guid>
+    <guid>https://YingboMa.github.io/blog/</guid>
     <pubDate>Tue, 16 Mar 2021 00:00:00 UT</pubDate>
   </item>
   <item>
     <title><![CDATA[Taylor Series, Fourier Series, and Cauchy's Integral Formula]]></title>
-    <link>https://yingboma.github.io/posts/2018_12_17_taylor_fourier_cauchy/</link>
+    <link>https://YingboMa.github.io/posts/2018_12_17_taylor_fourier_cauchy/</link>
     <description><![CDATA[Using integration to compute high order derivatives of analytical functions.
-<br><a href="https://yingboma.github.io/posts/2018_12_17_taylor_fourier_cauchy/">Read more</a>]]></description>
+<br><a href="https://YingboMa.github.io/posts/2018_12_17_taylor_fourier_cauchy/">Read more</a>]]></description>
     
-    <guid>https://yingboma.github.io/posts/2018_12_17_taylor_fourier_cauchy/</guid>
+    <guid>https://YingboMa.github.io/posts/2018_12_17_taylor_fourier_cauchy/</guid>
     <pubDate>Mon, 17 Dec 2018 00:00:00 UT</pubDate>
   </item>
   <item>
     <title><![CDATA[Having Fun with an Integral]]></title>
-    <link>https://yingboma.github.io/posts/2018_12_08_fun_integral/</link>
+    <link>https://YingboMa.github.io/posts/2018_12_08_fun_integral/</link>
     <description><![CDATA[Using Cauchy&#39;s Integral Formula and Taylor Series to calculate a fun integral
-<br><a href="https://yingboma.github.io/posts/2018_12_08_fun_integral/">Read more</a>]]></description>
+<br><a href="https://YingboMa.github.io/posts/2018_12_08_fun_integral/">Read more</a>]]></description>
     
-    <guid>https://yingboma.github.io/posts/2018_12_08_fun_integral/</guid>
+    <guid>https://YingboMa.github.io/posts/2018_12_08_fun_integral/</guid>
     <pubDate>Sat, 8 Dec 2018 00:00:00 UT</pubDate>
   </item>
 </channel>
