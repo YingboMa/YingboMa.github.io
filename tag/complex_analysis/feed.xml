@@ -1,0 +1,27 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<channel>
+  <title><![CDATA[Yingbo Ma's homepage]]></title>
+  <description><![CDATA[Yingbo Ma&#39;s homepage
+]]></description>
+  <link>https://yingboma.github.io/</link>
+  <atom:link href="https://yingboma.github.io/tag/complex_analysis/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title><![CDATA[Taylor Series, Fourier Series, and Cauchy's Integral Formula]]></title>
+    <link>https://yingboma.github.io/posts/2018_12_17_taylor_fourier_cauchy/</link>
+    <description><![CDATA[Using integration to compute high order derivatives of analytical functions.
+<br><a href="https://yingboma.github.io/posts/2018_12_17_taylor_fourier_cauchy/">Read more</a>]]></description>
+    
+    <guid>https://yingboma.github.io/posts/2018_12_17_taylor_fourier_cauchy/</guid>
+    <pubDate>Mon, 17 Dec 2018 00:00:00 UT</pubDate>
+  </item>
+  <item>
+    <title><![CDATA[Having Fun with an Integral]]></title>
+    <link>https://yingboma.github.io/posts/2018_12_08_fun_integral/</link>
+    <description><![CDATA[Using Cauchy&#39;s Integral Formula and Taylor Series to calculate a fun integral
+<br><a href="https://yingboma.github.io/posts/2018_12_08_fun_integral/">Read more</a>]]></description>
+    
+    <guid>https://yingboma.github.io/posts/2018_12_08_fun_integral/</guid>
+    <pubDate>Sat, 8 Dec 2018 00:00:00 UT</pubDate>
+  </item>
+</channel>
+</rss>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+<url>
+    <loc>https://yingboma.github.io/404/index.html</loc>
+    <lastmod>2021-03-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://yingboma.github.io/about_me/index.html</loc>
+    <lastmod>2021-03-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://yingboma.github.io/index.html</loc>
+    <lastmod>2021-03-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://yingboma.github.io/posts/2018_12_08_fun_integral/index.html</loc>
+    <lastmod>2021-03-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://yingboma.github.io/posts/2018_12_17_taylor_fourier_cauchy/index.html</loc>
+    <lastmod>2021-03-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://yingboma.github.io/blog/index.html</loc>
+    <lastmod>2021-03-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+</urlset>
