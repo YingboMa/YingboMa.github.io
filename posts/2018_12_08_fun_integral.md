@@ -9,7 +9,7 @@ rss = "Using Cauchy's Integral Formula and Taylor Series to calculate a fun inte
 
 
 # Having Fun with an Integral
-\blogdate{Dec 8, 2018}
+\blogdate{December 8, 2018}
 
 
 > The main point is not quantity or speed—the main point is quality of thought.
@@ -20,8 +20,7 @@ $$
 I = \int_{0}^{2\pi} e^{\cos \theta} \cos(\sin \theta)\; d\theta
 $$
 
-is an integral that WolframAlpha cannot YET compute analytically as of today (8
-Dec, 2018). Here is the
+is an integral that WolframAlpha cannot YET compute analytically as of today (December 8, 2018). Here is the
 [link](https://www.wolframalpha.com/input/?i=integrate+e%5E(cos(x))*cos(sin(x)),+x+from+0+to+2pi).
 
 ![screenshot](/img/2018-12-28-wolframalpha.png)

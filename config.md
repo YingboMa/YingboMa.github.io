@@ -26,6 +26,8 @@ For instance:
 -->
 \newcommand{\R}{\mathbb R}
 \newcommand{\scal}[1]{\langle #1 \rangle}
+\newcommand{\d}[1]{\mathop{}\!\mathrm{d} #1}
+\newcommand{\dd}[2]{\frac{\d{#1}}{\d{#2}}}
 
 \newcommand{\blogtitle}[1]{\#1}
 \newcommand{\blogdate}[1]{~~~<p><span class="blog-date">#1</span></p>~~~}

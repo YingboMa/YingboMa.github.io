@@ -10,8 +10,10 @@ rss = "A short description of the page which would serve as **blurb** in a `RSS`
 
 ## 2021
 
+[A Survey of Differential-Algebraic Equations](/posts/2021_03_19_dae_intro/) [March 19, 2021]
+
 ## 2018
 
-[Having Fun with an Integral](/posts/2018_12_08_fun_integral/)
+[Taylor Series, Fourier Series, and Cauchy's Integral Formula](/posts/2018_12_17_taylor_fourier_cauchy/) [December 17, 2018]
 
-[Taylor Series, Fourier Series, and Cauchy's Integral Formula](/posts/2018_12_17_taylor_fourier_cauchy/)
+[Having Fun with an Integral](/posts/2018_12_08_fun_integral/) [December 8, 2018]
