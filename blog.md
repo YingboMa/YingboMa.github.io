@@ -10,7 +10,7 @@ rss = "A short description of the page which would serve as **blurb** in a `RSS`
 
 ## 2021
 
-[A Survey of Differential-Algebraic Equations](/posts/2021_03_19_dae_intro/) [March 19, 2021]
+[A Survey of Differential-Algebraic Equations (1)](/posts/2021_03_19_dae_intro/) [March 19, 2021]
 
 ## 2018
 
