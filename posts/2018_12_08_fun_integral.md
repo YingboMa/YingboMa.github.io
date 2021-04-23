@@ -25,7 +25,7 @@ analyticity of the integrand $e^{\cos \theta} \cos(\sin \theta)$. We can
 calculate it in the real domain by Taylor series or in the complex domain by
 Cauchy's integral formula.
 
-## Solution by Taylor Series
+\section{Solution by Taylor Series}
 
 First, let us introduce the function
 
@@ -54,7 +54,7 @@ $$
 
 Hence, we have $f(r) = 2\pi = I$.
 
-## Solution by Cauchy's Integral Formula
+\section{Solution by Cauchy's Integral Formula}
 
 First, let us introduce the same function
 

@@ -1,6 +1,4 @@
-@def title = "Home"
-@def notitle = true
-
-# Hi
+@def title = "Hello"
+@def nodate = true
 
 Under construction

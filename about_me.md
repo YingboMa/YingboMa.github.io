@@ -2,7 +2,7 @@
 @def nodate = true
 @def notitle = true
 
-# A few things about me
+\section{A few things about me}
 
 - I am interested in researching new algorithms and writing fast software implementations to accelerate numerical integration for stiff ordinary differential equations and differential-algebraic equations. These equations are an integral part of modeling for mechanical, chemical, and biological systems.
 
@@ -10,7 +10,7 @@
 
 - I am working on my sleep schedule.
 
-# A few of my projects
+\section{A few of my projects}
 
 - [ModelingToolkit.jl](https://github.com/SciML/ModelingToolkit.jl) A modeling framework for automatically parallelized scientific computing.
 
@@ -26,7 +26,7 @@
 
 - [DiffEqSensitivity.jl](https://github.com/SciML/DiffEqSensitivity.jl) A package for doing sensitivity analysis.
 
-# Contact Information
+\section{Contact Information}
 
 You can find me in the Julia Slack. You can also email me at mayingbo5 (_*at*_) gmail.com
 

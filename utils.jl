@@ -40,10 +40,15 @@ function hfun_blogposts()
         pubdate, title, url = post
         yr = Dates.year(pubdate)
         if yr != prev_yr
-            write(io, "## $yr\n")
+            write(io, "\\section{$yr}\n")
         end
         prev_yr = yr
         write(io, "- `$pubdate` -- [$title]($url)\n")
     end
     return Franklin.fd2html(String(take!(io)), internal=true)
+end
+
+function lx_section(com, _)
+    content = Franklin.content(com.braces[1])
+    return """~~~<h3 class="b normal">~~~$content~~~</h3>~~~"""
 end
