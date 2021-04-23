@@ -7,11 +7,6 @@ rss = "Using integration to compute high order derivatives of analytical functio
 
 @def tags = ["math", "complex analysis"]
 
-
-# Taylor Series, Fourier Series, and Cauchy's Integral Formula
-\blogdate{Dec 17, 2018}
-
-
 > The shortest and the best way between two truths of the real domain often
 > passes through the imaginary one.
 >

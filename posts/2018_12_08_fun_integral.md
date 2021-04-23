@@ -7,11 +7,6 @@ rss = "Using Cauchy's Integral Formula and Taylor Series to calculate a fun inte
 
 @def tags = ["math", "complex analysis"]
 
-
-# Having Fun with an Integral
-\blogdate{December 8, 2018}
-
-
 > The main point is not quantity or speed—the main point is quality of thought.
 >
 > --- Jane Gilman

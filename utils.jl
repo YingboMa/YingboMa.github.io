@@ -19,7 +19,7 @@ end
 
 """
     {{blogposts}}
-Plug in the list of blog posts contained in the `/blog/` folder.
+Plug in the list of blog posts contained in the `/posts/` folder.
 """
 function hfun_blogposts()
     io = IOBuffer()

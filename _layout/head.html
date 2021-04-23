@@ -16,8 +16,9 @@
     body {
         font-size: 16px;
         background: #f1f1f1;
-        line-height: 1.66em;
+        line-height: 1.8;
         font-family: "PT Serif", sans-serif;
+        margin: 0 auto 0 auto;
     }
 
     a {
@@ -33,11 +34,42 @@
         transition: opacity .15s ease-in;
     }
 
+    .colbox-blue {
+        background-color: #eef3f5;
+        padding-top: 5px;
+        padding-right: 10px;
+        padding-left: 10px;
+        padding-bottom: 5px;
+        margin-left: 5px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        border-radius: 0 10px 10px 0;
+        border-left: 5px solid #4c9cf1;
+    }
+
+    blockquote {
+        background: var(--block-background);
+        border-left: 7px solid #a8a8a8;
+        margin: 1.5em 10px;
+        padding: 0.5em 10px;
+        font-style: italic;
+    }
+
+    blockquote p {
+        display: inline;
+    }
+
+    .hljs {
+        font-family: "Fira Code", monospace;
+        font-size: 14px;
+        line-height: 1.35em;
+        border-radius: 2px;
+    }
 </style>
 
 <body>
 
-    <div class="pa5 pt4 pb4" style="margin: 0 auto; max-width: 960px; background: #ffffff"> <!-- page container -->
+    <div class="pa5 pt4 pb4" style="margin: 0 auto; max-width: 900px; background: #ffffff"> <!-- page container -->
 
   {{insert header.html}}
 
