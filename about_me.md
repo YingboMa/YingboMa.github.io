@@ -1,4 +1,6 @@
 @def title = "About Me"
+@def nodate = true
+@def notitle = true
 
 # A few things about me
 

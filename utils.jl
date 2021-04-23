@@ -1,3 +1,5 @@
+using Dates
+
 function hfun_bar(vname)
     val = Meta.parse(vname[1])
     return round(sqrt(val), digits=2)
@@ -13,4 +15,35 @@ function lx_baz(com, _)
     brace_content = Franklin.content(com.braces[1]) # input string
     # do whatever you want here
     return uppercase(brace_content)
+end
+
+"""
+    {{blogposts}}
+Plug in the list of blog posts contained in the `/blog/` folder.
+"""
+function hfun_blogposts()
+    io = IOBuffer()
+    posts = readdir("posts")
+    post_data = map(posts) do post
+        ps  = splitext(post)[1]
+        url = "/posts/$ps/"
+        surl = strip(url, '/')
+        title = pagevar(surl, :title)
+        pubdate = pagevar(surl, :date)
+        pubdate, title, url
+    end
+
+    sort!(post_data, by=first, rev=true)
+
+    prev_yr = nothing
+    for post in post_data
+        pubdate, title, url = post
+        yr = Dates.year(pubdate)
+        if yr != prev_yr
+            write(io, "## $yr\n")
+        end
+        prev_yr = yr
+        write(io, "- `$pubdate` -- [$title]($url)\n")
+    end
+    return Franklin.fd2html(String(take!(io)), internal=true)
 end
