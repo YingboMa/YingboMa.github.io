@@ -26,21 +26,22 @@ the step size.
 \section{Constant Step Size BDF}
 Let's first solve the simple problem: deriving BDFs assuming the step size $h$
 is constant. An order $s$ BDF interpolates $s+1$ points to form a degree $s$
-polynomial $p_s(t)$. Since we want to compute the next step, we can center the
-polynomial at the current time $t_{n}$ and parametrize $t$ by the step size $h$.
-Thus, we define $q_{s}(c) = p_{s}(t) = p_{s}(t_{n}+ch)$ where $c\in\R$ is the
-new independent variable after the change of variable. Also note that we have
+polynomial $p^{(n+1)}_s(t)$ when computing the approximation $u_{n+1}$. Since we
+want to compute the next step, we can center the polynomial at the current time
+$t_{n}$ and parametrize $t$ by the step size $h$. Thus, we define $q^{(n+1)}_{s}
+(c) = p_{s}(t) = p_{s}(t_{n}+ch)$ where $c\in\R$ is the new independent variable
+after the change of variable. Also note that we have
 
 $$t- t_{n-i} = (t_{n} + ch) - (t_{n} - ih) = (c+i)h.$$
 
 We can then explicitly construct the $s$-th order interpolant using the [Newton
 polynomial interpolation](http://fourier.eng.hmc.edu/e176/lectures/ch7/node4.html):
 \begin{align}
-&q_{s}(c) = p_{s}(t) = p_{s}(t_{n}+ch) \\
-= \;& [u_{n+1}] + [u_{n+1},u_{n}](t-t_{n+1}) + ... + [u_{n+1},...,u_{n+1-s}](t-t_{n+1})\cdots (t-t_{n+2-s}) \\
-= \;& [u_{n+1}] + \sum_{j=1}^s [u_{n+1},...,u_{n+1-j}](t-t_{n+1})\cdots(t-t_{n-(j-2)}) \\
-= \;& [u_{n+1}] + \sum_{j=1}^s \frac{(c-1) c \cdots (c+j-2)}{j!} h^j j![u_{n+1},...,u_{n+1-j}] \\
-= \;& [u_{n+1}] + \sum_{j=1}^s \frac{1}{j!} \left( \prod_{i=1}^j c+i-2 \right) \nabla_{h}^{(j)} u_{n+1},
+&q^{(n+1)}_{s}(c) = p^{(n+1)}_{s}(t) = p^{(n+1)}_{s}(t_{n}+ch) \\
+= \;& u_{n+1} + [u_{n+1},u_{n}](t-t_{n+1}) + ... + [u_{n+1},...,u_{n+1-s}](t-t_{n+1})\cdots (t-t_{n+2-s}) \\
+= \;& u_{n+1} + \sum_{j=1}^s [u_{n+1},...,u_{n+1-j}](t-t_{n+1})\cdots(t-t_{n-(j-2)}) \\
+= \;& u_{n+1} + \sum_{j=1}^s \frac{(c-1) c \cdots (c+j-2)}{j!} h^j j![u_{n+1},...,u_{n+1-j}] \\
+= \;& u_{n+1} + \sum_{j=1}^s \frac{1}{j!} \left( \prod_{i=1}^j c+i-2 \right) \nabla_{h}^{(j)} u_{n+1},
 \end{align}
 where $[...]$ is the Newton's divided difference, and $\nabla$ is the [backward
 differentiation operator](https://en.wikipedia.org/wiki/Finite_difference#Higher-order_differences).
@@ -68,28 +69,54 @@ $$
 \section{Varying the Step Size by Transplanting to Equidistant Grid}
 
 A simple strategy to vary the step size is to simply evaluate the old polynomial
-$p$ at the equidistant grid $t_{n} - i\tilde{h}$ for $i=1, 2,..., s-2$ to
-obtain an interpolated "constant step size history", when changing to a new step
-size $\tilde{h}$. This strategy is simple because evaluating and
-re-interpolating a polynomial interpolant are linear transformations of the
-history, so we can solve for matrices that performs such transformations instead
-of working with polynomials explicitly.
+$p$ from the at the equidistant grid $t_{n} - i\tilde{h}$ for $i=0, 1, 2,..., s$
+to obtain an interpolated "constant step size history", when changing to a new
+step size $\tilde{h}$. During the step changing process, we do not need to
+compute $u_{n+1}$. Hence, we only need the polynomial $p^{(n)}(t_{n}+ch)$. This
+strategy is simple because evaluating and re-interpolating a polynomial
+interpolant are linear transformations of the history, so we can solve for
+matrices that performs such transformations instead of working with polynomials
+explicitly.
 
-Recall that $q_{s}(c) = p_{s}(t) = p_{s}(t_{n}+ch)$, we will work on the
-transformed $c$-coordinate for simplicity. Let's denote $\tilde{q}_{s}$ as the
-re-interpolated polynomial with the new step size $\tilde{h}$. Note that we have
+Note that the only step size dependent term is $\nabla_{h}^{(j)} u_{n}$. Let's
+define $r = \tilde{h}/h$,
 \begin{align}
-q_{s}(c) = [u_{n+1}] + \sum_{j=1}^s \frac{1}{j!} \left( \prod_{i=1}^j c+i-2 \right) \nabla_{h}^{(j)} u_{n+1}, \\
-\tilde{q}_{s}(c) = [u_{n+1}] + \sum_{j=1}^s \frac{1}{j!} \left( \prod_{i=1}^j c+i-2 \right) \nabla_{\tilde{h}}^{(j)} u_{n+1}.
+D = [\nabla_{h} u_{n}, \nabla_{h}^2 u_{n}, ..., \nabla_{h}^s u_{n}] \in \R^{m \times s},
+\quad \text{and} \quad \tilde{D} = [\nabla_{\tilde{h}} u_{n}, \nabla_{\tilde{h}}^2 u_{n}, ..., \nabla_{\tilde{h}}^s u_{n}]  \in \R^{m \times s}.
 \end{align}
-The only step size dependent term is $\nabla_{h}^{(j)} u_{n+1}$. Let's define
+Constructing the polynomial $p^{(n)}_{s}(t_{n}+ch)$ is simple as we only need to
+subtract all the indeices in $p^{(n+1)}_{s}(t_{n}+ch)$ by 1, which results in
 \begin{align}
-D = [\nabla_{h} u_{n+1}, \nabla_{h}^2 u_{n+1}, ...,  , \nabla_{h}^s u_{n+1}]
-\quad \text{and} \quad \tilde{D} = [\nabla_{\tilde{h}} u_{n+1}, \nabla_{\tilde{h}}^2 u_{n+1}, ...,  , \nabla_{\tilde{h}}^s u_{n+1}].
+p^{(n)}_{s}(t_{n}+ch) = \;& q^{(n)}_{s}(c) = u_{n} + \sum_{j=1}^s [u_{n},...,u_{n-j}](t-t_{n})\cdots(t-t_{n-(j-1)}) \\
+= \;& u_{n} + \sum_{j=1}^s \frac{1}{j!} \left( \prod_{i=1}^j c+i-1 \right) \nabla_{h}^{(j)} u_{n}\\
+= \;& u_{n} + \sum_{j=1}^s \frac{1}{j!} \left( \prod_{i=1}^j c+i-1 \right) D_{j}\\
+= \;& u_{n} + \sum_{j=1}^s \frac{1}{j!} \left( \prod_{i=0}^{j-1} c+i \right) D_{j}.
 \end{align}
-With the interpolation condition, we force $q_{s}(c) = \tilde{q}_{s}(c)$ for $c
-= -1, 0, ..., s-2$:
+The interpolating polynomial with the new step size $\tilde{h} = rh$ is then
 \begin{align}
-\sum_{j=1}^s \frac{1}{j!} \left( \prod_{i=1}^j c+i-2 \right) \nabla_{h}^{(j)} u_{n+1} =
-\sum_{j=1}^s \frac{1}{j!} \left( \prod_{i=1}^j c+i-2 \right) \nabla_{\tilde{h}}^{(j)} u_{n+1}.
+\tilde{p}^{(n)}_{s}(t_{n}+\tilde{h}) = \tilde{q}^{(n)}_{s}(c) = u_{n} + \sum_{j=1}^s \frac{1}{j!} \left( \prod_{i=0}^{j-1} c+i \right) \tilde{D}_{j}.
+\end{align}
+With the interpolation condition, we force $p^{(n)}_{s}(t_{n}+c\tilde{h}) =
+p^{(n)}_{s}(t_{n}+crh) = \tilde{p}^{(n)}_{s}(t_{n}+c\tilde{h})$ for $c = 0, -1,
+..., -s$. Note that when $c=0$, the interpolation condition simplifies to
+$\tilde{p}^{(n)}_{s}(t_{n}) = u_{n} = p^{(n)}_{s}(t_{n})$ which always holds.
+Therefore, we only need to solve
+\begin{align}
+\sum_{j=1}^s D_{i,j} \frac{1}{j!} \left( \prod_{i=0}^{j-1} cr+i \right) =
+\sum_{j=1}^s \tilde{D}_{i,j} \frac{1}{j!} \left( \prod_{i=0}^{j-1} c+i \right)
+\end{align}
+for $\tilde{D}$ with $c = -1, -2, .., -s$ and $i = 1, ..., m$. When express the
+above system of equations in terms of matrix, there is
+\begin{align}
+D R = \tilde{D} U,
+\end{align}
+where
+\begin{align}
+R_{jk} = \frac{1}{j!} \left( \prod_{i=0}^{j-1} i-k r \right), \quad\text{and}
+\quad U_{jk} = \frac{1}{j!} \left( \prod_{i=0}^{j-1} i-k \right).
+\end{align}
+Note that $k = -c$ as $k=1,2,...,s$. We end this section by remarking that
+$R^2=I$, so
+\begin{align}
+\tilde{D} = D (R U).
 \end{align}
