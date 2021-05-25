@@ -41,17 +41,17 @@ polynomial interpolation](http://fourier.eng.hmc.edu/e176/lectures/ch7/node4.htm
 = \;& u_{n+1} + [u_{n+1},u_{n}](t-t_{n+1}) + ... + [u_{n+1},...,u_{n+1-s}](t-t_{n+1})\cdots (t-t_{n+2-s}) \\
 = \;& u_{n+1} + \sum_{j=1}^s [u_{n+1},...,u_{n+1-j}](t-t_{n+1})\cdots(t-t_{n-(j-2)}) \\
 = \;& u_{n+1} + \sum_{j=1}^s \frac{(c-1) c \cdots (c+j-2)}{j!} h^j j![u_{n+1},...,u_{n+1-j}] \\
-= \;& u_{n+1} + \sum_{j=1}^s \frac{1}{j!} \left( \prod_{i=1}^j c+i-2 \right) \nabla_{h}^{(j)} u_{n+1},
+= \;& u_{n+1} + \sum_{j=1}^s \frac{1}{j!} \left( \prod_{i=1}^j c+i-2 \right) \nabla_{h}^{j} u_{n+1},
 \end{align}
 where $[...]$ is the Newton's divided difference, and $\nabla$ is the [backward
 differentiation operator](https://en.wikipedia.org/wiki/Finite_difference#Higher-order_differences).
-We used the relation $h^j j![u_{n+1},...,u_{n+1-j}] = \nabla_{h}^{(j)} u_{n+1}$
+We used the relation $h^j j![u_{n+1},...,u_{n+1-j}] = \nabla_{h}^{j} u_{n+1}$
 in the last step.
 
 Now, we want to set $p'(t+h) = u'_{n+1}$. Note that we have $q'(1) = h p'(t_{n}
 +h) = h u'_{n+1}$. Therefore, we need to solve
 $$
-\sum_{j=1}^s \delta_{j} \nabla^{(j)} u_{n+1} = h u'_{n+1},
+\sum_{j=1}^s \delta_{j} \nabla^{j} u_{n+1} = h u'_{n+1},
 $$
 where
 \begin{align}
@@ -63,7 +63,7 @@ where
 
 Together, the constant step size BDF is
 $$
-\sum_{j=1}^s \frac{1}{j} \nabla^{(j)} u_{n+1} = h u'_{n+1}.
+\sum_{j=1}^s \frac{1}{j} \nabla^{j} u_{n+1} = h u'_{n+1}.
 $$
 
 \section{Varying the Step Size by Transplanting to Equidistant Grid}
@@ -78,17 +78,17 @@ interpolant are linear transformations of the history, so we can solve for
 matrices that performs such transformations instead of working with polynomials
 explicitly.
 
-Note that the only step size dependent term is $\nabla_{h}^{(j)} u_{n}$. Let's
+Note that the only step size dependent term is $\nabla_{h}^{j} u_{n}$. Let's
 define $r = \tilde{h}/h$,
 \begin{align}
 D = [\nabla_{h} u_{n}, \nabla_{h}^2 u_{n}, ..., \nabla_{h}^s u_{n}] \in \R^{m \times s},
 \quad \text{and} \quad \tilde{D} = [\nabla_{\tilde{h}} u_{n}, \nabla_{\tilde{h}}^2 u_{n}, ..., \nabla_{\tilde{h}}^s u_{n}]  \in \R^{m \times s}.
 \end{align}
 Constructing the polynomial $p^{(n)}_{s}(t_{n}+ch)$ is simple as we only need to
-subtract all the indeices in $p^{(n+1)}_{s}(t_{n}+ch)$ by 1, which results in
+subtract the indices in $p^{(n+1)}_{s}(t_{n}+ch)$ by 1 appropriately:
 \begin{align}
-p^{(n)}_{s}(t_{n}+ch) = \;& q^{(n)}_{s}(c) = u_{n} + \sum_{j=1}^s [u_{n},...,u_{n-j}](t-t_{n})\cdots(t-t_{n-(j-1)}) \\
-= \;& u_{n} + \sum_{j=1}^s \frac{1}{j!} \left( \prod_{i=1}^j c+i-1 \right) \nabla_{h}^{(j)} u_{n}\\
+p^{(n)}_{s}(t_{n}+ch) = q^{(n)}_{s}(c) = \;& u_{n} + \sum_{j=1}^s [u_{n},...,u_{n-j}](t-t_{n})\cdots(t-t_{n-(j-1)}) \\
+= \;& u_{n} + \sum_{j=1}^s \frac{1}{j!} \left( \prod_{i=1}^j c+i-1 \right) \nabla_{h}^{j} u_{n}\\
 = \;& u_{n} + \sum_{j=1}^s \frac{1}{j!} \left( \prod_{i=1}^j c+i-1 \right) D_{j}\\
 = \;& u_{n} + \sum_{j=1}^s \frac{1}{j!} \left( \prod_{i=0}^{j-1} c+i \right) D_{j}.
 \end{align}
