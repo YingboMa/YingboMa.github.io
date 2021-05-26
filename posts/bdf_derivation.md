@@ -26,18 +26,18 @@ the step size.
 \section{Constant Step Size BDF}
 Let's first solve the simple problem: deriving BDFs assuming the step size $h$
 is constant. An order $s$ BDF interpolates $s+1$ points to form a degree $s$
-polynomial $p^{(n+1)}_s(t)$ when computing the approximation $u_{n+1}$. Since we
+polynomial $p_{s,n+1}(t)$ when computing the approximation $u_{n+1}$. Since we
 want to compute the next step, we can center the polynomial at the current time
-$t_{n}$ and parametrize $t$ by the step size $h$. Thus, we define $q^{(n+1)}_{s}
-(c) = p_{s}(t) = p_{s}(t_{n}+ch)$ where $c\in\R$ is the new independent variable
-after the change of variable. Also note that we have
+$t_{n}$ and parametrize $t$ by the step size $h$. Thus, we define $q_{s,n+1}
+(c) = p_{s,n+1}(t) = p_{s,n+1}(t_{n}+ch)$ where $c\in\R$ is the new independent
+variable after the change of variable. Also note that we have
 
 $$t- t_{n-i} = (t_{n} + ch) - (t_{n} - ih) = (c+i)h.$$
 
 We can then explicitly construct the $s$-th order interpolant using the [Newton
 polynomial interpolation](http://fourier.eng.hmc.edu/e176/lectures/ch7/node4.html):
 \begin{align}
-&q^{(n+1)}_{s}(c) = p^{(n+1)}_{s}(t) = p^{(n+1)}_{s}(t_{n}+ch) \\
+&q_{s,n+1}(c) = p_{s,n+1}(t) = p_{s,n+1}(t_{n}+ch) \\
 = \;& u_{n+1} + [u_{n+1},u_{n}](t-t_{n+1}) + ... + [u_{n+1},...,u_{n+1-s}](t-t_{n+1})\cdots (t-t_{n+2-s}) \\
 = \;& u_{n+1} + \sum_{j=1}^s [u_{n+1},...,u_{n+1-j}](t-t_{n+1})\cdots(t-t_{n-(j-2)}) \\
 = \;& u_{n+1} + \sum_{j=1}^s \frac{(c-1) c \cdots (c+j-2)}{j!} h^j j![u_{n+1},...,u_{n+1-j}] \\
@@ -72,7 +72,7 @@ A simple strategy to vary the step size is to simply evaluate the old polynomial
 $p$ from the at the equidistant grid $t_{n} - i\tilde{h}$ for $i=0, 1, 2,..., s$
 to obtain an interpolated "constant step size history", when changing to a new
 step size $\tilde{h}$. During the step changing process, we do not need to
-compute $u_{n+1}$. Hence, we only need the polynomial $p^{(n)}(t_{n}+ch)$. This
+compute $u_{n+1}$. Hence, we only need the polynomial $p_{s,n}(t_{n}+ch)$. This
 strategy is simple because evaluating and re-interpolating a polynomial
 interpolant are linear transformations of the history, so we can solve for
 matrices that performs such transformations instead of working with polynomials
@@ -84,29 +84,29 @@ define $r = \tilde{h}/h$,
 D = [\nabla_{h} u_{n}, \nabla_{h}^2 u_{n}, ..., \nabla_{h}^s u_{n}] \in \R^{m \times s},
 \quad \text{and} \quad \tilde{D} = [\nabla_{\tilde{h}} u_{n}, \nabla_{\tilde{h}}^2 u_{n}, ..., \nabla_{\tilde{h}}^s u_{n}]  \in \R^{m \times s}.
 \end{align}
-Constructing the polynomial $p^{(n)}_{s}(t_{n}+ch)$ is simple as we only need to
-subtract the indices in $p^{(n+1)}_{s}(t_{n}+ch)$ by 1 appropriately:
+Constructing the polynomial $p_{s,n}(t_{n}+ch)$ is simple as we only need to
+subtract the indices in $p_{s,n+1}(t_{n}+ch)$ by 1 appropriately:
 \begin{align}
-p^{(n)}_{s}(t_{n}+ch) = q^{(n)}_{s}(c) = \;& u_{n} + \sum_{j=1}^s [u_{n},...,u_{n-j}](t-t_{n})\cdots(t-t_{n-(j-1)}) \\
+p_{s,n}(t_{n}+ch) = q_{s,n}(c) = \;& u_{n} + \sum_{j=1}^s [u_{n},...,u_{n-j}](t-t_{n})\cdots(t-t_{n-(j-1)}) \\
 = \;& u_{n} + \sum_{j=1}^s \frac{1}{j!} \left( \prod_{i=1}^j c+i-1 \right) \nabla_{h}^{j} u_{n}\\
 = \;& u_{n} + \sum_{j=1}^s \frac{1}{j!} \left( \prod_{i=1}^j c+i-1 \right) D_{j}\\
 = \;& u_{n} + \sum_{j=1}^s \frac{1}{j!} \left( \prod_{i=0}^{j-1} c+i \right) D_{j}.
 \end{align}
 The interpolating polynomial with the new step size $\tilde{h} = rh$ is then
 \begin{align}
-\tilde{p}^{(n)}_{s}(t_{n}+\tilde{h}) = \tilde{q}^{(n)}_{s}(c) = u_{n} + \sum_{j=1}^s \frac{1}{j!} \left( \prod_{i=0}^{j-1} c+i \right) \tilde{D}_{j}.
+\tilde{p}_{s,n}(t_{n}+\tilde{h}) = \tilde{q}_{s,n}(c) = u_{n} + \sum_{j=1}^s \frac{1}{j!} \left( \prod_{i=0}^{j-1} c+i \right) \tilde{D}_{j}.
 \end{align}
-With the interpolation condition, we force $p^{(n)}_{s}(t_{n}+c\tilde{h}) =
-p^{(n)}_{s}(t_{n}+crh) = \tilde{p}^{(n)}_{s}(t_{n}+c\tilde{h})$ for $c = 0, -1,
+With the interpolation condition, we force $p_{s,n}(t_{n}+c\tilde{h}) =
+p_{s,n}(t_{n}+crh) = \tilde{p}_{s,n}(t_{n}+c\tilde{h})$ for $c = 0, -1,
 ..., -s$. Note that when $c=0$, the interpolation condition simplifies to
-$\tilde{p}^{(n)}_{s}(t_{n}) = u_{n} = p^{(n)}_{s}(t_{n})$ which always holds.
+$\tilde{p}_{s,n}(t_{n}) = u_{n} = p_{s,n}(t_{n})$ which always holds.
 Therefore, we only need to solve
 \begin{align}
 \sum_{j=1}^s D_{i,j} \frac{1}{j!} \left( \prod_{i=0}^{j-1} cr+i \right) =
 \sum_{j=1}^s \tilde{D}_{i,j} \frac{1}{j!} \left( \prod_{i=0}^{j-1} c+i \right)
 \end{align}
-for $\tilde{D}$ with $c = -1, -2, .., -s$ and $i = 1, ..., m$. When express the
-above system of equations in terms of matrix, there is
+for $\tilde{D}$ with $c = -1, -2, .., -s$ and $i = 1, ..., m$. The system of
+equations can be expressed in terms of matrices:
 \begin{align}
 D R = \tilde{D} U,
 \end{align}
@@ -115,8 +115,63 @@ where
 R_{jk} = \frac{1}{j!} \left( \prod_{i=0}^{j-1} i-k r \right), \quad\text{and}
 \quad U_{jk} = \frac{1}{j!} \left( \prod_{i=0}^{j-1} i-k \right).
 \end{align}
-Note that $k = -c$ as $k=1,2,...,s$. We end this section by remarking that
+Note that $c = -k$ as $k=1,2,...,s$. We end this section by remarking that
 $R^2=I$, so
 \begin{align}
 \tilde{D} = D (R U).
+\end{align}
+
+\section{Updating backward differences and local truncation error}
+
+A natural choice for the predictor is then $u^{(0)}_{n+1} = p_{s,n}(t_{n}+h) = u_{n} + \sum_{j=1}
+^s D_{j}$. From the definition of the backward difference, we have
+\begin{align}
+\nabla_{h}^{s+1} u_{n+1} &= \nabla_{h}^{s} u_{n+1} - \nabla_{h}^{s} u_{n}\\
+&= \nabla_{h}^{s-1} u_{n+1} - \nabla_{h}^{s-1} u_{n} - \nabla_{h}^{s} u_{n} \\
+&= \nabla_{h}^{s-2} u_{n+1} - \nabla_{h}^{s-2} u_{n} - \nabla_{h}^{s-1} u_{n} - \nabla_{h}^{s} u_{n} \\
+&= u_{n+1} - u_{n} - ... - \nabla_{h}^{s-2} u_{n} - \nabla_{h}^{s-1} u_{n} - \nabla_{h}^{s} u_{n} \\
+&= u_{n+1} - u^{(0)}_{n+1}.
+\end{align}
+Therefore, the $s+1$-th order backward difference of the successive step is
+simply the difference between the corrector $u_{n+1}$ and the predictor $u^{(0)}
+_{n+1}$. Also, note that from
+\begin{align}
+\nabla_{j}^{j} u_{n+1} = \nabla_{h}^{j+1} u_{n+1} + \nabla_{h}^{j} u_{n},
+\end{align}
+where $j\in\mathbb{N}$, we can compute all the lower order backward differences
+of the successive step. Finally, we note that
+\begin{align}
+\nabla_{h}^{s+2} u_{n+1} = \nabla_{h}^{s+1} u_{n+1} - \nabla_{h}^{s+1} u_{n}.
+\end{align}
+
+By the standard result from polynomial interpolation, we know that
+\begin{align}
+u(t) - p_{s,n+1}(t) = \frac{u^{(s+1)}(\xi_{t})}{(s+1)!} w(t),
+\end{align}
+where $w(t) = \prod_{j=-1}^{s-1}(t - t_{n-j})$. We assume that all the history
+is completely accrate and approximate the error for $p'_{s,n+1}(t_{n+1})
+$, which is
+\begin{align}
+u'(t_{n+1}) = p'_{s,n+1}(t_{n+1}) + \frac{u^{(s+1)}(\xi_{t})}{(s+1)!} w'(t_{n+1}).
+\end{align}
+Note that we don't have the term with $w(t_{n+1})$ because it goes to $0$ by the
+definition of $w$. We have
+\begin{align}
+w'(t_{n+1}) &= \sum_{j=-1}^{s-1} \left[(t_{n+1}-t_{n-j})' \prod_{k=-1\;\land\; k\ne j}^{s-1} (t_{n+1}-t_{n-k}) \right] \\
+&= \sum_{j=-1}^{s-1} \prod_{k=-1\;\land\; k\ne j}^{s-1} (t_{n+1}-t_{n-k}) \quad
+\text{the product only doesn't vanish when $j=-1$} \\
+&= \prod_{k=0}^{s-1} (t_{n+1}-t_{n-k}).
+\end{align}
+Together, BDF with the leading error term is then
+\begin{align}
+hu'(t_{n+1}) &= hp'_{s,n+1}(t_{n+1}) + h\frac{u^{(s+1)}(\xi_{t})}{(s+1)!} \prod_{k=0}^{s-1} (t_{n+1}-t_{n-k}) \\
+&= q'_{s,n+1}(t_{n+1}) + h\frac{u^{(s+1)}(\xi_{t})}{(s+1)!} (h\cdot 2h
+\cdot 3h ... sh) \\
+&= q'_{s,n+1}(t_{n+1}) + h\frac{u^{(s+1)}(\xi_{t})}{(s+1)!} s!h^s \\
+&= q'_{s,n+1}(t_{n+1}) + \frac{u^{(s+1)}(\xi_{t})}{s+1} h^{s+1} \\
+&= \sum_{j=1}^s \frac{1}{j} \nabla^{j} u_{n+1} + \frac{1}{s+1}\nabla_{h}^{s+1} u_{n+1} + O(h^{s+2}).
+\end{align}
+Hence, the error estimate for the $s$-th order BDF is
+\begin{align}
+\frac{1}{s+1}\nabla_{h}^{s+1} u_{n+1}.
 \end{align}
