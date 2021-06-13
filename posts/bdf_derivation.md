@@ -23,7 +23,7 @@ the points $(t_{n+1}, u_{n+1}), (t_{n}, u_{n}), (t_{n-1}, u_{n-1}), ...$, and
 solve for the next step $u_{n+1}$ that makes $p'(t+h) = u'_{n+1}$, where $h$ is
 the step size.
 
-\section{Constant Step Size BDF}
+\section{Constant step size BDF}
 Let's first solve the simple problem: deriving BDFs assuming the step size $h$
 is constant. An order $s$ BDF interpolates $s+1$ points to form a degree $s$
 polynomial $p_{s,n+1}(t)$ when computing the approximation $u_{n+1}$. Since we
@@ -66,7 +66,7 @@ $$
 \sum_{j=1}^s \frac{1}{j} \nabla^{j} u_{n+1} = h u'_{n+1}.
 $$
 
-\section{Varying the Step Size by Transplanting to Equidistant Grid}
+\section{Varying the step size by transplanting to equidistant grid}
 
 A simple strategy to vary the step size is to simply evaluate the old polynomial
 $p$ from the at the equidistant grid $t_{n} - i\tilde{h}$ for $i=0, 1, 2,..., s$
@@ -121,8 +121,7 @@ $R^2=I$, so
 \tilde{D} = D (R U).
 \end{align}
 
-\section{Updating backward differences and local truncation error}
-
+\section{Updating backward differences}
 A natural choice for the predictor is then $u^{(0)}_{n+1} = p_{s,n}(t_{n}+h) = u_{n} + \sum_{j=1}
 ^s D_{j}$. From the definition of the backward difference, we have
 \begin{align}
@@ -132,18 +131,54 @@ A natural choice for the predictor is then $u^{(0)}_{n+1} = p_{s,n}(t_{n}+h) = u
 &= u_{n+1} - u_{n} - ... - \nabla_{h}^{s-2} u_{n} - \nabla_{h}^{s-1} u_{n} - \nabla_{h}^{s} u_{n} \\
 &= u_{n+1} - u^{(0)}_{n+1}.
 \end{align}
-Therefore, the $s+1$-th order backward difference of the successive step is
+Therefore, the $s+1$-th order backward difference of the next step is
 simply the difference between the corrector $u_{n+1}$ and the predictor $u^{(0)}
 _{n+1}$. Also, note that from
 \begin{align}
-\nabla_{j}^{j} u_{n+1} = \nabla_{h}^{j+1} u_{n+1} + \nabla_{h}^{j} u_{n},
+\nabla_{h}^{j} u_{n+1} = \nabla_{h}^{j+1} u_{n+1} + \nabla_{h}^{j} u_{n},
 \end{align}
 where $j\in\mathbb{N}$, we can compute all the lower order backward differences
-of the successive step. Finally, we note that
+of the next step, and
 \begin{align}
 \nabla_{h}^{s+2} u_{n+1} = \nabla_{h}^{s+1} u_{n+1} - \nabla_{h}^{s+1} u_{n}.
 \end{align}
+We can use the above updating relations to simplify the backward differences:
+\begin{align}
+\nabla^s u_{n+1} &= \nabla^{s+1} u_{n+1} + \nabla^{s} u_{n} = (u_{n+1}-u_{n+1}^{(0)}) + \nabla^{s} u_{n} \\
+\nabla^{s-1} u_{n+1} &= \nabla^{s} u_{n+1} + \nabla^{s-1} u_{n} = (u_{n+1}-u_{n+1}^{(0)}) + \nabla^{s} u_{n}  + \nabla^{s-1} u_{n} \\
+&\vdots \\
+\nabla^{j} u_{n+1} &= \nabla^{j+1} u_{n+1} + \nabla^{j-1} u_{n} = (u_{n+1}-u_{n+1}^{(0)}) + \sum_{k=j}^{s}\nabla^{k} u_{n}.
+\end{align}
+Therefore, BDF becomes
+\begin{align}
+\sum_{j=1}^s \frac{1}{j} \nabla^{j} u_{n+1} &= \sum_{j=1}^s \left[\frac{1}{j}\left(
+(u_{n+1}-u_{n+1}^0) + \sum_{k=j}^{s}\nabla^{k} u_{n}\right)\right] \\
+&=\gamma_{s} (u_{n+1}-u_{n+1}^0) + \sum_{j=1}^s \frac{1}{j}\sum_{k=j}^{s} \nabla^{k} u_{n},
+\end{align}
+where $\gamma_{j} = \sum_{k=1}^j \frac{1}{j}$. This naïve approach contains a
+lot of redundant computation, and the computational complexity is $O(s^2 m)$ for
+$u_{n}\in \R^m$. We can do a lot better if reorder the summation:
+\begin{align}
+&\sum_{j=1}^s \frac{1}{j}\sum_{k=j}^{s} \nabla^{k} u_{n}
+= \sum_{j=1}^s\sum_{k=j}^{s} \frac{1}{j} \nabla^{k} u_{n}
+= \sum_{j=1}^s\sum_{k=1 \;\land\; k\ge j}^{s} \frac{1}{j} \nabla^{k} u_{n}\\
+=&\sum_{k=1}^s\sum_{j=1 \;\land\; j\le k}^{s} \frac{1}{j} \nabla^{k} u_{n}
+\quad\text{note the interchange of summation}\\
+=&\sum_{k=1}^s\sum_{j=1}^{k} \frac{1}{j} \nabla^{k} u_{n}
+= \sum_{k=1}^s\left(\sum_{j=1}^{k} \frac{1}{j}\right) \nabla^{k} u_{n}
+= \sum_{k=1}^s \gamma_{k} \nabla^{k} u_{n}.
+\end{align}
+This expression can be evaluated by in $O(sm)$ time.
 
+Putting everything together, the simplified BDF is
+\begin{align}
+\gamma_{s} (u_{n+1}-u_{n+1}^0) +
+\sum_{k=1}^s \gamma_{k} \nabla^{k} u_{n} = h f(u_{n+1}, p, t_{n}+h),
+\end{align}
+and we can use an nonlinear equation solver to solve for $u_{n+1}$. We will omit
+the details of writing a stable and efficient nonlinear solver here.
+
+\section{Local truncation error}
 By the standard result from polynomial interpolation, we know that
 \begin{align}
 u(t) - p_{s,n+1}(t) = \frac{u^{(s+1)}(\xi_{t})}{(s+1)!} w(t),
@@ -173,5 +208,8 @@ hu'(t_{n+1}) &= hp'_{s,n+1}(t_{n+1}) + h\frac{u^{(s+1)}(\xi_{t})}{(s+1)!} \prod_
 \end{align}
 Hence, the error estimate for the $s$-th order BDF is
 \begin{align}
-\frac{1}{s+1}\nabla_{h}^{s+1} u_{n+1}.
+\frac{1}{s+1}\nabla_{h}^{s+1} u_{n+1},
 \end{align}
+and this quantity can easily be computed from the updated backward differences.
+With an appropriate controller for the step size and order, a quasi-constant
+step size BDF method can be implemented in its totality.
