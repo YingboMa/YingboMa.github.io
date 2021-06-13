@@ -9,13 +9,15 @@ formulas method."
 
 @def tags = ["math", "differential equations"]
 
-Backward differentiation formula (BDF) method is the most widely used method
+The backward differentiation formula (BDF) method is the most widely used method
 to solve stiff ordinary differential equations (ODEs) and differential-algebraic
-equations (DAEs). Famous solvers like `ode15s`, `ode15i`, `LSODA`, `CVODE`,
-`IDA`, and `DASSL` are all BDFs. Unfortunately, all BDF derivations online are
-not complete in the sense that one still needs to do hand derivation for some
-formulas to be able to write a robust and production-ready variable step size
-BDF implementation.
+equations (DAEs). Famous stiff solvers like `ode15s`, `ode15i`, `LSODA`, `CVODE`,
+`IDA`, and `DASSL` all use the BDF method. Unfortunately, all BDF derivations
+online are not complete in the sense that one still needs to do hand derivation
+for some formulas to fully understand the algorithm and be able to write a
+robust and production-ready variable step size BDF implementation. This blog
+post aims to bridge this gap by providing a complete derivation of all the
+formulas needed for a production-ready quasi-constant step size BDF method.
 
 Recall the definitions of ODEs $u' = f(u, p, t)$ and DAEs $F(u', u, p, t) = 0$.
 The idea behind BDFs is to use a polynomial $p(t)$ to interpolate $u(t)$ using
@@ -173,7 +175,7 @@ This expression can be evaluated by in $O(sm)$ time.
 Putting everything together, the simplified BDF is
 \begin{align}
 \gamma_{s} (u_{n+1}-u_{n+1}^0) +
-\sum_{k=1}^s \gamma_{k} \nabla^{k} u_{n} = h f(u_{n+1}, p, t_{n}+h),
+\sum_{k=1}^s \gamma_{k} \nabla^{k} u_{n} = h u'_{n+1},
 \end{align}
 and we can use an nonlinear equation solver to solve for $u_{n+1}$. We will omit
 the details of writing a stable and efficient nonlinear solver here.
