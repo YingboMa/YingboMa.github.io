@@ -11,13 +11,13 @@ formulas method."
 
 The backward differentiation formula (BDF) method is the most widely used method
 to solve stiff ordinary differential equations (ODEs) and differential-algebraic
-equations (DAEs). Famous stiff solvers like `ode15s`, `ode15i`, `LSODA`, `CVODE`,
-`IDA`, and `DASSL` all use the BDF method. Unfortunately, all BDF derivations
-online are not complete in the sense that one still needs to do hand derivation
-for some formulas to fully understand the algorithm and be able to write a
-robust and production-ready variable step size BDF implementation. This blog
-post aims to bridge this gap by providing a complete derivation of all the
-formulas needed for a production-ready quasi-constant step size BDF method.
+equations (DAEs). Famous stiff solvers like `ode15s`, `ode15i`, `LSODE`, `LSODA`,
+`CVODE`, `IDA`, and `DASSL` all use the BDF method. Unfortunately, all BDF
+derivations online are not complete, in the sense that one still needs to do
+hand derivation for some formulas to fully understand the algorithm and be able
+to write a robust and production-ready variable step size BDF implementation.
+This blog post aims to bridge this gap by providing a complete derivation of all
+the formulas needed for a production-ready quasi-constant step size BDF method.
 
 Recall the definitions of ODEs $u' = f(u, p, t)$ and DAEs $F(u', u, p, t) = 0$.
 The idea behind BDFs is to use a polynomial $p(t)$ to interpolate $u(t)$ using
@@ -45,7 +45,7 @@ polynomial interpolation](http://fourier.eng.hmc.edu/e176/lectures/ch7/node4.htm
 = \;& u_{n+1} + \sum_{j=1}^s \frac{(c-1) c \cdots (c+j-2)}{j!} h^j j![u_{n+1},...,u_{n+1-j}] \\
 = \;& u_{n+1} + \sum_{j=1}^s \frac{1}{j!} \left( \prod_{i=1}^j c+i-2 \right) \nabla_{h}^{j} u_{n+1},
 \end{align}
-where $[...]$ is the Newton's divided difference, and $\nabla$ is the [backward
+where $[...]$ denotes Newton's divided difference, and $\nabla$ is the [backward
 differentiation operator](https://en.wikipedia.org/wiki/Finite_difference#Higher-order_differences).
 We used the relation $h^j j![u_{n+1},...,u_{n+1-j}] = \nabla_{h}^{j} u_{n+1}$
 in the last step.
@@ -118,7 +118,19 @@ R_{jk} = \frac{1}{j!} \left( \prod_{i=0}^{j-1} i-k r \right), \quad\text{and}
 \quad U_{jk} = \frac{1}{j!} \left( \prod_{i=0}^{j-1} i-k \right).
 \end{align}
 Note that $c = -k$ as $k=1,2,...,s$. We end this section by remarking that
-$R^2=I$, so
+$U^2=I$.
+@@colbox-blue
+```julia
+julia> using LinearAlgebra
+
+julia> U(s) = [prod(i->i-k, 0:j-1)//factorial(j) for j in 1:s, k in 1:s]
+U (generic function with 1 method)
+
+julia> U(5)^2 == I
+true
+```
+@@
+Therefore, the divided differences with $\tilde{h}$ is simply
 \begin{align}
 \tilde{D} = D (R U).
 \end{align}
@@ -154,8 +166,8 @@ We can use the above updating relations to simplify the backward differences:
 Therefore, BDF becomes
 \begin{align}
 \sum_{j=1}^s \frac{1}{j} \nabla^{j} u_{n+1} &= \sum_{j=1}^s \left[\frac{1}{j}\left(
-(u_{n+1}-u_{n+1}^0) + \sum_{k=j}^{s}\nabla^{k} u_{n}\right)\right] \\
-&=\gamma_{s} (u_{n+1}-u_{n+1}^0) + \sum_{j=1}^s \frac{1}{j}\sum_{k=j}^{s} \nabla^{k} u_{n},
+(u_{n+1}-u_{n+1}^{(0)}) + \sum_{k=j}^{s}\nabla^{k} u_{n}\right)\right] \\
+&=\gamma_{s} (u_{n+1}-u_{n+1}^{(0)}) + \sum_{j=1}^s \frac{1}{j}\sum_{k=j}^{s} \nabla^{k} u_{n},
 \end{align}
 where $\gamma_{j} = \sum_{k=1}^j \frac{1}{j}$. This naïve approach contains a
 lot of redundant computation, and the computational complexity is $O(s^2 m)$ for
@@ -170,29 +182,29 @@ $u_{n}\in \R^m$. We can do a lot better if reorder the summation:
 = \sum_{k=1}^s\left(\sum_{j=1}^{k} \frac{1}{j}\right) \nabla^{k} u_{n}
 = \sum_{k=1}^s \gamma_{k} \nabla^{k} u_{n}.
 \end{align}
-This expression can be evaluated by in $O(sm)$ time.
+This expression can be evaluated in $O(sm)$ time.
 
 Putting everything together, the simplified BDF is
 \begin{align}
-\gamma_{s} (u_{n+1}-u_{n+1}^0) +
+\gamma_{s} (u_{n+1}-u_{n+1}^{(0)}) +
 \sum_{k=1}^s \gamma_{k} \nabla^{k} u_{n} = h u'_{n+1},
 \end{align}
-and we can use an nonlinear equation solver to solve for $u_{n+1}$. We will omit
-the details of writing a stable and efficient nonlinear solver here.
+and we can use a nonlinear equation solver to solve for $u_{n+1}$. We will omit
+the details of writing a stable and efficient nonlinear solver here as they are
+independent from the BDF method itself.
 
 \section{Local truncation error}
-By the standard result from polynomial interpolation, we know that
+By the standard result on polynomial interpolation, we know that
 \begin{align}
 u(t) - p_{s,n+1}(t) = \frac{u^{(s+1)}(\xi_{t})}{(s+1)!} w(t),
 \end{align}
 where $w(t) = \prod_{j=-1}^{s-1}(t - t_{n-j})$. We assume that all the history
-is completely accrate and approximate the error for $p'_{s,n+1}(t_{n+1})
-$, which is
+is completely accurate and compute the error of $p'_{s,n+1}(t_{n+1})$:
 \begin{align}
 u'(t_{n+1}) = p'_{s,n+1}(t_{n+1}) + \frac{u^{(s+1)}(\xi_{t})}{(s+1)!} w'(t_{n+1}).
 \end{align}
-Note that we don't have the term with $w(t_{n+1})$ because it goes to $0$ by the
-definition of $w$. We have
+Note that we don't have the term with $w(t_{n+1})$ because it goes to $0$ by
+the construction of $w$. Expanding $w'(t_{n+1})$:
 \begin{align}
 w'(t_{n+1}) &= \sum_{j=-1}^{s-1} \left[(t_{n+1}-t_{n-j})' \prod_{k=-1\;\land\; k\ne j}^{s-1} (t_{n+1}-t_{n-k}) \right] \\
 &= \sum_{j=-1}^{s-1} \prod_{k=-1\;\land\; k\ne j}^{s-1} (t_{n+1}-t_{n-k}) \quad
