@@ -23,6 +23,25 @@
 
 <item>
   <title>
+    <![CDATA[  A Complete Derivation of Quasi-constant Step Size BDF Method  ]]>
+  </title>
+  <link> https://YingboMa.github.io/posts/bdf_derivation/index.html </link>
+  <guid> https://YingboMa.github.io/posts/bdf_derivation/index.html </guid>
+  <description>
+    <![CDATA[  We will do a complete derivation of all the formulas necessary for implementing a complete quasi-constant step size backward differentiation formulas method.  ]]>
+  </description>  
+    
+  <pubDate>Fri, 23 Apr 2021 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Yingbo Ma</atom:name>
+  </atom:author>
+        
+</item>
+
+<item>
+  <title>
     <![CDATA[  A Survey of Differential-Algebraic Equations &#40;1&#41;  ]]>
   </title>
   <link> https://YingboMa.github.io/posts/2021_03_19_dae_intro/index.html </link>
