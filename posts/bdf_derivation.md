@@ -104,10 +104,10 @@ p_{s,n}(t_{n}+crh) = \tilde{p}_{s,n}(t_{n}+c\tilde{h})$ for $c = 0, -1,
 $\tilde{p}_{s,n}(t_{n}) = u_{n} = p_{s,n}(t_{n})$ which always holds.
 Therefore, we only need to solve
 \begin{align}
-\sum_{j=1}^s D_{i,j} \frac{1}{j!} \left( \prod_{i=0}^{j-1} cr+i \right) =
-\sum_{j=1}^s \tilde{D}_{i,j} \frac{1}{j!} \left( \prod_{i=0}^{j-1} c+i \right)
+\sum_{j=1}^s D_{l,j} \frac{1}{j!} \left( \prod_{i=0}^{j-1} cr+i \right) =
+\sum_{j=1}^s \tilde{D}_{l,j} \frac{1}{j!} \left( \prod_{i=0}^{j-1} c+i \right)
 \end{align}
-for $\tilde{D}$ with $c = -1, -2, .., -s$ and $i = 1, ..., m$. The system of
+for $\tilde{D}$ with $c = -1, -2, .., -s$ and $l = 1, ..., m$. The system of
 equations can be expressed in terms of matrices:
 \begin{align}
 D R = \tilde{D} U,
