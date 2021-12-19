@@ -7,7 +7,7 @@ rss = "This post introduces a strange but effective debugging technique in Julia
 
 @def tags = ["programming"]
 
-Often, most of the work during debugging is to reconstruct out the intermediate
+Often, most of the work during debugging is to reconstruct the intermediate
 states in an algorithm. A debugger can often facilitate this need, but it could
 be rather cumbersome to use if the breakpoint condition is complicated.
 
