@@ -230,32 +230,26 @@ Succinct interpretation.
 
 Rooted-tree shorthand (introduced after the expansion).
 - Notation: write a node with $m$ children as $[\tau_1,\dots,\tau_m]$ and a leaf as $\bullet$ ($F^{[0]}$). Define $\operatorname{ord}(\bullet)=1$ and $\operatorname{ord}([\tau_1,\dots,\tau_m])=1+\sum_r \operatorname{ord}(\tau_r)$.
-- Combinatorics (step-by-step):
-  1) Fix $q\ge 1$ and consider trees $\tau$ with $\operatorname{ord}(\tau)=q+1$.
-  2) Let the root have $m$ children $\tau_1,\dots,\tau_m$ with $\operatorname{ord}(\tau_r)\ge 1$. By definition,
-     $\operatorname{ord}([\tau_1,\dots,\tau_m]) = 1 + \sum_{r=1}^m \operatorname{ord}(\tau_r)$, hence $\sum_{r=1}^m \operatorname{ord}(\tau_r) = q$.
-  3) The ordered $m$-tuple $(\operatorname{ord}(\tau_1),\dots,\operatorname{ord}(\tau_m))$ is a composition of $q$ into $m$ positive integers. If we ignore the order of the children, this collapses to an integer partition of $q$.
-  4) For $q=5$, the partitions are $1+1+1+1+1$, $2+1+1+1$, $3+1+1$, $2+2+1$, $4+1$, $3+2$, and $5$. Our loops enumerate all ordered versions (compositions) of these, and the single $1/m!$ factor at the root symmetrizes over permutations.
-
+- Sets and permutation notation: let $\mathcal{T}_n$ be the set of unlabeled rooted trees of order $n$ (using the order above). For an $m$-tuple $(\alpha_1,\dots,\alpha_m)$ that may contain repeats, let $\mathrm{Perm}^*([\alpha_1,\dots,\alpha_m])$ denote the set of distinct permutations of this multiset. If $\pi\in\mathrm{Perm}^*$ acts by reordering positions, we write $[\pi\cdot(\alpha_1,\dots,\alpha_m)]$ for the permuted bracket.
 - Root child-order patterns at the root (unlabeled; children unordered):
   - $(1,1,1,1,1)$: $[\bullet,\bullet,\bullet,\bullet,\bullet]$.
-  - $(2,1,1,1)$: $[[\bullet],\bullet,\bullet,\bullet]$.
-  - $(3,1,1)$: a root with one child of order 3 and two leaves, e.g. $[[\bullet,\bullet],\bullet,\bullet]$.
-  - $(2,2,1)$: two children of order 2 and one leaf, e.g. $[[\bullet],[\bullet],\bullet]$.
-  - $(4,1)$: one child of order 4 and one leaf, e.g. $[[\bullet,\bullet,\bullet],\bullet]$.
-  - $(3,2)$: one child of order 3 and one child of order 2, e.g. $[[\bullet,\bullet],[\bullet]]$.
+  - $(2,1,1,1)$: all distinct permutations of a single $\kappa\in\mathcal{T}_2$ and three leaves: $\{\,[\pi\cdot(\kappa,\bullet,\bullet,\bullet)] : \pi\in\mathrm{Perm}^*([\kappa,\bullet,\bullet,\bullet])\,\}$.
+  - $(3,1,1)$: all distinct permutations of one $\sigma\in\mathcal{T}_3$ and two leaves: $\{\,[\pi\cdot(\sigma,\bullet,\bullet)] : \pi\in\mathrm{Perm}^*([\sigma,\bullet,\bullet])\,\}$.
+  - $(2,2,1)$: all distinct permutations of two order-2 children and one leaf: $\{\,[\pi\cdot(\kappa_1,\kappa_2,\bullet)] : \kappa_1,\kappa_2\in\mathcal{T}_2,\ \pi\in\mathrm{Perm}^*([\kappa_1,\kappa_2,\bullet])\,\}$.
+  - $(4,1)$: all distinct permutations of one $\rho\in\mathcal{T}_4$ and one leaf: $\{\,[\pi\cdot(\rho,\bullet)] : \pi\in\mathrm{Perm}^*([\rho,\bullet])\,\}$.
+  - $(3,2)$: all distinct permutations of one $\sigma\in\mathcal{T}_3$ and one $\kappa\in\mathcal{T}_2$: $\{\,[\pi\cdot(\sigma,\kappa)] : \pi\in\mathrm{Perm}^*([\sigma,\kappa])\,\}$.
   - $(5)$: a single child $[\tau]$ with $\operatorname{ord}(\tau)=5$. In the unexpanded formula, this group is exactly $\sum_{a} (\partial f_i/\partial u_a)(u_0)\, (1/5)\, F_a^{[4]}$, and all internal order-5 subtree shapes are contained within $F^{[4]}$.
 
 - Evaluation (purely shorthand for the sums): for a given shape, $F_i([\tau_1,\dots,\tau_m])(u_0)$ denotes
-  $$
-  \sum_{a_1,\dots,a_m=1}^{d} \Bigl( \tfrac{1}{m!} \, \frac{\partial^{m} f_i(u_0)}{\partial u_{a_1}\cdots\partial u_{a_m}} \Bigr)
-  \prod_{r=1}^{m} \Bigl( \tfrac{1}{q_r} \, F_{a_r}(\tau_r)(u_0) \Bigr),
-  $$
-  where $q_r=\operatorname{ord}(\tau_r)$ and $F_{a_r}(\bullet)=F_{a_r}^{[0]}$. For example, the entire $m=3$ contribution
-  $$
-  \frac{1}{3!} \sum_{a_1,a_2,a_3} \frac{\partial^3 f_i(u_0)}{\partial u_{a_1}\partial u_{a_2}\partial u_{a_3}} \Bigl[ \tfrac{1}{3} (F_{a_1}^{[2]}F_{a_2}^{[0]}F_{a_3}^{[0]} + \cdots) + \tfrac{1}{4} (F_{a_1}^{[1]}F_{a_2}^{[1]}F_{a_3}^{[0]} + \cdots) \Bigr]
-  $$
-  is precisely the sum over the two shapes $[\tau,\bullet,\bullet]$ with $\operatorname{ord}(\tau)=3$ and $[\sigma,\sigma',\bullet]$ with $\operatorname{ord}(\sigma)=\operatorname{ord}(\sigma')=2$, via the rule above. The shorthand does not add assumptions; it only indexes and names the already-present sums and weights in \eqref{eq:F-recursion}.
+$$
+\sum_{a_1,\dots,a_m=1}^{d} \Bigl( \tfrac{1}{m!} \, \frac{\partial^{m} f_i(u_0)}{\partial u_{a_1}\cdots\partial u_{a_m}} \Bigr)
+\prod_{r=1}^{m} \Bigl( \tfrac{1}{q_r} \, F_{a_r}(\tau_r)(u_0) \Bigr),
+$$
+where $q_r=\operatorname{ord}(\tau_r)$ and $F_{a_r}(\bullet)=F_{a_r}^{[0]}$. For example, the entire $m=3$ contribution
+$$
+\frac{1}{3!} \sum_{a_1,a_2,a_3} \frac{\partial^3 f_i(u_0)}{\partial u_{a_1}\partial u_{a_2}\partial u_{a_3}} \Bigl[ \tfrac{1}{3} (F_{a_1}^{[2]}F_{a_2}^{[0]}F_{a_3}^{[0]} + \cdots) + \tfrac{1}{4} (F_{a_1}^{[1]}F_{a_2}^{[1]}F_{a_3}^{[0]} + \cdots) \Bigr]
+$$
+is precisely the sum over the two shapes $[\tau,\bullet,\bullet]$ with $\operatorname{ord}(\tau)=3$ and $[\sigma,\sigma',\bullet]$ with $\operatorname{ord}(\sigma)=\operatorname{ord}(\sigma')=2$, via the rule above. The shorthand does not add assumptions; it only indexes and names the already-present sums and weights in \eqref{eq:F-recursion}.
 
 - Exact correspondence to \eqref{eq:F-recursion}: by construction,
   $$
@@ -270,17 +264,17 @@ Tree-form expansion of $F_i^{[5]}$ (shorthand that exactly equals the explicit s
 F_i^{[5]}
 &= F_i([\bullet,\bullet,\bullet,\bullet,\bullet])(u_0)
 \\[2pt]
-&\quad+ F_i([[\bullet],\bullet,\bullet,\bullet])(u_0)
+&\quad+ \sum_{\pi\in \mathrm{Perm}^*} F_i([\pi\cdot(\kappa,\bullet,\bullet,\bullet)])(u_0)\quad(\kappa\in\mathcal{T}_2)
 \\[2pt]
-&\quad+ \Bigl( F_i([[\bullet,\bullet],\bullet,\bullet])(u_0) + F_i([[[\bullet]],\bullet,\bullet])(u_0) \Bigr)
+&\quad+ \sum_{\pi\in \mathrm{Perm}^*} \sum_{\sigma\in \mathcal{T}_3} F_i([\pi\cdot(\sigma,\bullet,\bullet)])(u_0)
 \\[2pt]
-&\quad+ F_i([[\bullet],[\bullet],\bullet])(u_0)
+&\quad+ \sum_{\pi\in \mathrm{Perm}^*} \sum_{\kappa_1,\kappa_2\in \mathcal{T}_2} F_i([\pi\cdot(\kappa_1,\kappa_2,\bullet)])(u_0)
 \\[2pt]
-&\quad+ \Bigl( F_i([[\bullet,\bullet,\bullet],\bullet])(u_0) + F_i([[[\bullet],\bullet],\bullet])(u_0) + F_i([[[\bullet,\bullet]],\bullet])(u_0) + F_i([[[[\bullet]]],\bullet])(u_0) \Bigr)
+&\quad+ \sum_{\pi\in \mathrm{Perm}^*} \sum_{\rho\in \mathcal{T}_4} F_i([\pi\cdot(\rho,\bullet)])(u_0)
 \\[2pt]
-&\quad+ \Bigl( F_i([[\bullet,\bullet],[\bullet]])(u_0) + F_i([[[\bullet]],[\bullet]])(u_0) \Bigr)
+&\quad+ \sum_{\pi\in \mathrm{Perm}^*} \sum_{\substack{\sigma\in \mathcal{T}_3\\ \kappa\in \mathcal{T}_2}} F_i([\pi\cdot(\sigma,\kappa)])(u_0)
 \\[2pt]
-&\quad+ F_i([\tau])(u_0)\quad\text{with } \operatorname{ord}(\tau)=5\text{ (this equals the }m=1\text{ term } \sum_a (\partial f_i/\partial u_a)\, (1/5)\, F_a^{[4]}\text{)}.
+&\quad+ \sum_{\tau\in \mathcal{T}_5} F_i([\tau])(u_0).
 \end{aligned}
 \end{equation}
 
