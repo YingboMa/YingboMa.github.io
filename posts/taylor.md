@@ -192,93 +192,96 @@ function Compute_F(k):  # returns table F[i][q] for i=1..d and q=0..k
 
 This implements Eq. \eqref{eq:F-recursion} exactly, with the constraints $q_1+\cdots+q_m=q$ and $q_r\ge 1$ enforced by the `Compositions` loop.
 
+\section{1.4.2 How rooted trees arise from the loop nest}
+
+Direct expansion to $q=5$ (keep all $d$-sums explicit; lower orders unexpanded):
+\begin{equation}
+\label{eq:q5-direct}
+\begin{aligned}
+F_i^{[5]}
+&= \underbrace{\frac{1}{5!} \sum_{a_1,\dots,a_5=1}^{d}
+\frac{\partial^{5} f_i(u_0)}{\partial u_{a_1}\cdots\partial u_{a_5}}\,
+F_{a_1}^{[0]} F_{a_2}^{[0]} F_{a_3}^{[0]} F_{a_4}^{[0]} F_{a_5}^{[0]}}_{m=5,\ (1,1,1,1,1)}
+\\[4pt]
+&\quad+ \underbrace{\frac{1}{4!} \sum_{a_1,\dots,a_4=1}^{d} \frac{\partial^{4} f_i(u_0)}{\partial u_{a_1}\cdots\partial u_{a_4}}\, \frac{1}{2}
+\Bigl[ F_{a_1}^{[1]} F_{a_2}^{[0]} F_{a_3}^{[0]} F_{a_4}^{[0]}
++ F_{a_1}^{[0]} F_{a_2}^{[1]} F_{a_3}^{[0]} F_{a_4}^{[0]}
++ F_{a_1}^{[0]} F_{a_2}^{[0]} F_{a_3}^{[1]} F_{a_4}^{[0]}
++ F_{a_1}^{[0]} F_{a_2}^{[0]} F_{a_3}^{[0]} F_{a_4}^{[1]} \Bigr]}_{m=4,\ \text{perms of }(2,1,1,1)}
+\\[4pt]
+&\quad+ \underbrace{\frac{1}{3!} \sum_{a_1,a_2,a_3=1}^{d} \frac{\partial^{3} f_i(u_0)}{\partial u_{a_1}\partial u_{a_2}\partial u_{a_3}} \Bigl[
+\tfrac{1}{3} \bigl( F_{a_1}^{[2]} F_{a_2}^{[0]} F_{a_3}^{[0]} + F_{a_1}^{[0]} F_{a_2}^{[2]} F_{a_3}^{[0]} + F_{a_1}^{[0]} F_{a_2}^{[0]} F_{a_3}^{[2]} \bigr)
++ \tfrac{1}{4} \bigl( F_{a_1}^{[1]} F_{a_2}^{[1]} F_{a_3}^{[0]} + F_{a_1}^{[1]} F_{a_2}^{[0]} F_{a_3}^{[1]} + F_{a_1}^{[0]} F_{a_2}^{[1]} F_{a_3}^{[1]} \bigr)
+\Bigr]}_{m=3,\ (3,1,1)\ \text{and}\ (2,2,1)}
+\\[4pt]
+&\quad+ \underbrace{\frac{1}{2!} \sum_{a_1,a_2=1}^{d} \frac{\partial^{2} f_i(u_0)}{\partial u_{a_1}\partial u_{a_2}} \Bigl[
+\tfrac{1}{4} \bigl( F_{a_1}^{[3]} F_{a_2}^{[0]} + F_{a_1}^{[0]} F_{a_2}^{[3]} \bigr)
++ \tfrac{1}{6} \bigl( F_{a_1}^{[2]} F_{a_2}^{[1]} + F_{a_1}^{[1]} F_{a_2}^{[2]} \bigr)
+\Bigr]}_{m=2,\ (4,1)\ \text{and}\ (3,2)}
+\\[4pt]
+&\quad+ \underbrace{\sum_{a=1}^{d} \frac{\partial f_i(u_0)}{\partial u_{a}} \, \tfrac{1}{5} \, F_{a}^{[4]}}_{m=1,\ (5)}.
+\end{aligned}
+\end{equation}
+Here $F^{[0]}=f(u_0)$; $F^{[1]}$, $F^{[2]}$, $F^{[3]}$, $F^{[4]}$ remain unexpanded. For each $m\in\{1,\dots,5\}$, we sum over all compositions $(q_1,\dots,q_m)$ of $5$ and over component indices; each child contributes $\tfrac{1}{q_r}\,F_{a_r}^{[q_r-1]}$ and the parent contributes $\tfrac{1}{m!}$.
+
+Succinct interpretation.
+- The five groups above correspond to $m=5,4,3,2,1$ with child-order patterns $(1,1,1,1,1)$, $(2,1,1,1)$, $(3,1,1)$ and $(2,2,1)$, $(4,1)$ and $(3,2)$, and $(5)$.
+- This is the literal recurrence \eqref{eq:F-recursion}: higher-order coefficients are obtained by differentiating $f_i$ and attaching lower-order $F^{[\cdot]}$ with weights $\tfrac{1}{m!}\prod_r \tfrac{1}{q_r}$.
+
+Rooted-tree shorthand (introduced after the expansion).
+- Notation: write a node with $m$ children as $[\tau_1,\dots,\tau_m]$ and a leaf as $\bullet$ ($F^{[0]}$). Define $\operatorname{ord}(\bullet)=1$ and $\operatorname{ord}([\tau_1,\dots,\tau_m])=1+\sum_r \operatorname{ord}(\tau_r)$.
+- Combinatorics (step-by-step):
+  1) Fix $q\ge 1$ and consider trees $\tau$ with $\operatorname{ord}(\tau)=q+1$.
+  2) Let the root have $m$ children $\tau_1,\dots,\tau_m$ with $\operatorname{ord}(\tau_r)\ge 1$. By definition,
+     $\operatorname{ord}([\tau_1,\dots,\tau_m]) = 1 + \sum_{r=1}^m \operatorname{ord}(\tau_r)$, hence $\sum_{r=1}^m \operatorname{ord}(\tau_r) = q$.
+  3) The ordered $m$-tuple $(\operatorname{ord}(\tau_1),\dots,\operatorname{ord}(\tau_m))$ is a composition of $q$ into $m$ positive integers. If we ignore the order of the children, this collapses to an integer partition of $q$.
+  4) For $q=5$, the partitions are $1+1+1+1+1$, $2+1+1+1$, $3+1+1$, $2+2+1$, $4+1$, $3+2$, and $5$. Our loops enumerate all ordered versions (compositions) of these, and the single $1/m!$ factor at the root symmetrizes over permutations.
+
+- Root child-order patterns at the root (unlabeled; children unordered):
+  - $(1,1,1,1,1)$: $[\bullet,\bullet,\bullet,\bullet,\bullet]$.
+  - $(2,1,1,1)$: $[[\bullet],\bullet,\bullet,\bullet]$.
+  - $(3,1,1)$: a root with one child of order 3 and two leaves, e.g. $[[\bullet,\bullet],\bullet,\bullet]$.
+  - $(2,2,1)$: two children of order 2 and one leaf, e.g. $[[\bullet],[\bullet],\bullet]$.
+  - $(4,1)$: one child of order 4 and one leaf, e.g. $[[\bullet,\bullet,\bullet],\bullet]$.
+  - $(3,2)$: one child of order 3 and one child of order 2, e.g. $[[\bullet,\bullet],[\bullet]]$.
+  - $(5)$: a single child $[\tau]$ with $\operatorname{ord}(\tau)=5$. In the unexpanded formula, this group is exactly $\sum_{a} (\partial f_i/\partial u_a)(u_0)\, (1/5)\, F_a^{[4]}$, and all internal order-5 subtree shapes are contained within $F^{[4]}$.
+
+- Evaluation (purely shorthand for the sums): for a given shape, $F_i([\tau_1,\dots,\tau_m])(u_0)$ denotes
+  $$
+  \sum_{a_1,\dots,a_m=1}^{d} \Bigl( \tfrac{1}{m!} \, \frac{\partial^{m} f_i(u_0)}{\partial u_{a_1}\cdots\partial u_{a_m}} \Bigr)
+  \prod_{r=1}^{m} \Bigl( \tfrac{1}{q_r} \, F_{a_r}(\tau_r)(u_0) \Bigr),
+  $$
+  where $q_r=\operatorname{ord}(\tau_r)$ and $F_{a_r}(\bullet)=F_{a_r}^{[0]}$. For example, the entire $m=3$ contribution
+  $$
+  \frac{1}{3!} \sum_{a_1,a_2,a_3} \frac{\partial^3 f_i(u_0)}{\partial u_{a_1}\partial u_{a_2}\partial u_{a_3}} \Bigl[ \tfrac{1}{3} (F_{a_1}^{[2]}F_{a_2}^{[0]}F_{a_3}^{[0]} + \cdots) + \tfrac{1}{4} (F_{a_1}^{[1]}F_{a_2}^{[1]}F_{a_3}^{[0]} + \cdots) \Bigr]
+  $$
+  is precisely the sum over the two shapes $[\tau,\bullet,\bullet]$ with $\operatorname{ord}(\tau)=3$ and $[\sigma,\sigma',\bullet]$ with $\operatorname{ord}(\sigma)=\operatorname{ord}(\sigma')=2$, via the rule above. The shorthand does not add assumptions; it only indexes and names the already-present sums and weights in \eqref{eq:F-recursion}.
+
+- Exact correspondence to \eqref{eq:F-recursion}: by construction,
+  $$
+  F_i^{[q]} \;=\; \sum_{m=1}^{q} \; \sum_{\substack{q_1+\cdots+q_m=q\\ q_r\ge 1}} F_i\bigl([\tau_1,\dots,\tau_m]\bigr)(u_0),\quad \text{with } \operatorname{ord}(\tau_r)=q_r.
+  $$
+  This is just a renaming of the loops: the outer $1/m!$ and inner $1/q_r$ factors are exactly those in \eqref{eq:F-recursion}.
+
+Tree-form expansion of $F_i^{[5]}$ (shorthand that exactly equals the explicit sum in \eqref{eq:q5-direct}):
+\begin{equation}
+\label{eq:q5-tree}
+\begin{aligned}
+F_i^{[5]}
+&= F_i([\bullet,\bullet,\bullet,\bullet,\bullet])(u_0)
+\\[2pt]
+&\quad+ F_i([[\bullet],\bullet,\bullet,\bullet])(u_0)
+\\[2pt]
+&\quad+ \Bigl( F_i([[\bullet,\bullet],\bullet,\bullet])(u_0) + F_i([[[\bullet]],\bullet,\bullet])(u_0) \Bigr)
+\\[2pt]
+&\quad+ F_i([[\bullet],[\bullet],\bullet])(u_0)
+\\[2pt]
+&\quad+ \Bigl( F_i([[\bullet,\bullet,\bullet],\bullet])(u_0) + F_i([[[\bullet],\bullet],\bullet])(u_0) + F_i([[[\bullet,\bullet]],\bullet])(u_0) + F_i([[[[\bullet]]],\bullet])(u_0) \Bigr)
+\\[2pt]
+&\quad+ \Bigl( F_i([[\bullet,\bullet],[\bullet]])(u_0) + F_i([[[\bullet]],[\bullet]])(u_0) \Bigr)
+\\[2pt]
+&\quad+ F_i([\tau])(u_0)\quad\text{with } \operatorname{ord}(\tau)=5\text{ (this equals the }m=1\text{ term } \sum_a (\partial f_i/\partial u_a)\, (1/5)\, F_a^{[4]}\text{)}.
+\end{aligned}
+\end{equation}
+
 Python: rooted execution trees for the scheduling above
-```python
-from __future__ import annotations
-from dataclasses import dataclass, field
-from functools import lru_cache
-from itertools import product
-from typing import Tuple, List
-
-# Unicode superscripts/subscripts for nicer derivative labels
-_SUPERS = str.maketrans("0123456789-", "⁰¹²³⁴⁵⁶⁷⁸⁹⁻")
-_SUBS   = str.maketrans("0123456789-", "₀₁₂₃₄₅₆₇₈₉₋")
-
-def sup_digits(n: int) -> str:
-    return str(n).translate(_SUPERS)
-
-def sub_digits(n: int) -> str:
-    return str(n).translate(_SUBS)
-
-@dataclass(frozen=True)
-class TreeNode:
-    kind: str  # 'leaf' | 'coeff' | 'deriv'
-    label: str
-    children: Tuple['TreeNode', ...] = field(default_factory=tuple)
-
-    def pretty_lines(self, prefix: str = "", is_last: bool = True) -> List[str]:
-        connector = "└─ " if is_last else "├─ "
-        lines = [prefix + connector + self.label]
-        new_prefix = prefix + ("   " if is_last else "│  ")
-        for idx, child in enumerate(self.children):
-            lines.extend(child.pretty_lines(new_prefix, idx == len(self.children) - 1))
-        return lines
-
-    def tau_summary(self) -> str:
-        if self.kind == 'leaf':
-            return "•"
-        if self.kind == 'coeff':
-            return self.children[0].tau_summary() if self.children else "•"
-        # deriv node
-        return "[" + ",".join(child.tau_summary() for child in self.children) + "]"
-
-def compositions(n: int, m: int) -> List[Tuple[int, ...]]:
-    if m == 0:
-        return [()] if n == 0 else []
-    result: List[Tuple[int, ...]] = []
-    for first in range(1, n - m + 2):
-        for rest in compositions(n - first, m - 1):
-            result.append((first,) + rest)
-    return result
-
-@lru_cache(maxsize=None)
-def enumerate_execution_trees(i: int, q: int, d: int) -> Tuple[TreeNode, ...]:
-    # Base: F[i][0] = f_i(u0) corresponds to a single leaf
-    if q == 0:
-        return (TreeNode(kind='leaf', label=f"F[{i}][0] ≡ f{sub_digits(i)}(u{sub_digits(0)})"),)
-
-    nodes: List[TreeNode] = []
-    for m in range(1, q + 1):
-        for q_tuple in compositions(q, m):
-            for a_tuple in product(range(1, d + 1), repeat=m):
-                child_options: List[Tuple[TreeNode, ...]] = []
-                for r, q_r in enumerate(q_tuple):
-                    a_r = a_tuple[r]
-                    child_options.append(enumerate_execution_trees(a_r, q_r - 1, d))
-                # Cartesian product over child expansions
-                for chosen_children in product(*child_options):
-                    # Wrap each child with its (1/q_r) factor to reflect the product rule weights
-                    wrapped_children: Tuple[TreeNode, ...] = tuple(
-                        TreeNode(kind='coeff', label=f"(1/{q_r}) ×", children=(chosen_children[idx],))
-                        for idx, q_r in enumerate(q_tuple)
-                    )
-                    deriv = "∂" + sup_digits(m) + f" f{sub_digits(i)}/" + "".join(f"∂u{sub_digits(a)}" for a in a_tuple)
-                    q_str = ",".join(str(x) for x in q_tuple)
-                    node_label = f"(1/{m}!) {deriv}; q=({q_str})"
-                    nodes.append(TreeNode(kind='deriv', label=node_label, children=wrapped_children))
-    return tuple(nodes)
-
-def print_execution_trees(i: int, q: int, d: int, limit: int | None = None) -> None:
-    trees = list(enumerate_execution_trees(i, q, d))
-    if limit is not None:
-        trees = trees[:limit]
-    print(f"Execution trees for F[{i}][{q}] with dimension d={d}: count={len(trees)}")
-    for t in trees:
-        print("τ =", t.tau_summary())
-        for line in t.pretty_lines():
-            print(line)
-
-if __name__ == "__main__":
-    # Small demonstration to keep output manageable
-    print_execution_trees(i=1, q=2, d=2)
-```
